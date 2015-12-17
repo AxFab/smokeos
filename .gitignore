@@ -1,0 +1,27 @@
+# Use white-listed files and black-listed directories
+*
+!*/
+
+# Black listed directories
+[Bb]in/
+[Ll]ib/
+[Oo]bj/
+[Tt]mp/
+[Bb]uild/
+[Rr]elease/
+.*/
+
+# Allow source files
+!*.h
+!*.c
+!*.asm
+
+# Allow documentation files
+!*.md
+!*.sh
+
+# Allow repository files
+!.gitignore
+!.gitmodules
+!Makefile
+!*.mk
