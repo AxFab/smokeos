@@ -81,3 +81,16 @@ char *getcwd(char *buf, size_t size)
   __syscall(0xb7, buf, size);
   return buf;
 }
+
+int getuid(void) 
+{
+  __syscall(0xc7, 0);
+}
+
+/* Get current username */
+int getlogin_r(char *buf, size_t size)
+{
+  strncpy(buf, "root", size);
+  return 0;
+}
+

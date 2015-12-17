@@ -16,7 +16,8 @@
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 # F L A G S -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-CFLAGS += -Wall -Wextra -Wno-unused-parameter -ggdb3 -fno-builtin
+CFLAGS += -Wall -Wextra -Wno-unused-parameter -fno-builtin
+# CFLAGS += -ggdb3 
 # CFLAGS += -pedantic
 CFLAGS += -D_DATE_=\"'$(DATE)'\" -D_OSNAME_=\"'$(LINUX)'\"
 CFLAGS += -D_GITH_=\"'$(GIT)'\" -D_VTAG_=\"'$(VERSION)'\"
@@ -52,6 +53,15 @@ color_SCP = $(srcdir)/crt/linux/script.ld
 $(eval $(call linkp,color,std))
 DV_UTILS += $(bindir)/color
 
+# shell
+sh_src-y += $(srcdir)/utils/sh.c
+sh_LFLAGS := $(LFLAGS)
+sh_SLIBS += skc
+sh_CRT = $(srcdir)/crt/linux/crt0.asm
+sh_SCP = $(srcdir)/crt/linux/script.ld
+$(eval $(call linkp,sh,std))
+DV_UTILS += $(bindir)/sh
+
 # U N I T - T E S T S -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 # T A R G E T S -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -61,9 +71,9 @@ skc_src-y += $(wildcard $(srcdir)/ext/*.c)
 skc_src-y += $(srcdir)/crt/int64.c
 skc_src-y += $(srcdir)/crt/smkos.c
 skc_src-y += $(wildcard $(srcdir)/crt/linux/*.c)
+DV_LIBS += $(libdir)/libskc.so
 
 skc_LFLAGS := $(LFLAGS)
-# skc_src-y += $(wildcard $(srcdir)/sys/*.c)
 $(eval $(call llib,skc,std))
 
 $(eval $(call crt,crt/linux/crt0))
