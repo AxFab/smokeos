@@ -18,7 +18,22 @@
 #  The configuration is on `sources.mk`.
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 NAME = SmokeOS_Utils
-ARCH = x86
+
+build ?= x86-pc-linux-gnu
+build_arch := $(word 1,$(subst -, ,$(build)))
+build_vendor := $(word 2,$(subst -, ,$(build)))
+build_os := $(patsubst $(build_arch)-$(build_vendor)-%,%,$(build))
+
+host ?= x86-pc-linux-gnu
+host_arch := $(word 1,$(subst -, ,$(host)))
+host_vendor := $(word 2,$(subst -, ,$(host)))
+host_os := $(patsubst $(host_arch)-$(host_vendor)-%,%,$(host))
+
+target ?= x86-pc-linux-gnu
+target_arch := $(word 1,$(subst -, ,$(target)))
+target_vendor := $(word 2,$(subst -, ,$(target)))
+target_os := $(patsubst $(target_arch)-$(target_vendor)-%,%,$(target))
+
 
 S := @
 V := $(shell [ -z $(VERBOSE) ] && echo @)
@@ -113,10 +128,10 @@ endef
 define kimg
 DEPS += $(call obj,$2,$1,d)
 $1: $(gendir)/$1
-$(gendir)/$1: $(call obj,$2,$1,o) $(outdir)/_$(ARCH)/crtk.o
+$(gendir)/$1: $(call obj,$2,$1,o) $(outdir)/_$(target_arch)/crtk.o
 	$(S) mkdir -p $$(dir $$@)
 	$(Q) echo "    LD  "$$@
-	$(V) $(LD) -T $(srcdir)/_$(ARCH)/kernel.ld $($(1)_LFLAGS) -o $$@ $(call obj,$2,$1,o)
+	$(V) $(LD) -T $(srcdir)/_$(target_arch)/kernel.ld $($(1)_LFLAGS) -o $$@ $(call obj,$2,$1,o)
 	$(Q) ls -lh $$@
 	$(Q) size $$@
 endef
@@ -167,11 +182,11 @@ check: $(DV_CHECK)
 .PHONY: clean distclean config check
 
 # P A C K A G I N G -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-release: $(gendir)/$(NAME)-$(ARCH)-$(VERSION).tar
+release: $(gendir)/$(NAME)-$(target_arch)-$(VERSION).tar
 # .bz2
-# $(gendir)/$(NAME)-$(ARCH)-$(VERSION).tar.bz2: $(gendir)/$(NAME)-$(ARCH)-$(VERSION).tar
+# $(gendir)/$(NAME)-$(target_arch)-$(VERSION).tar.bz2: $(gendir)/$(NAME)-$(target_arch)-$(VERSION).tar
 # 	$(V) gzip $< -o $@
-$(gendir)/$(NAME)-$(ARCH)-$(VERSION).tar: $(DV_UTILS) $(DV_LIBS)
+$(gendir)/$(NAME)-$(target_arch)-$(VERSION).tar: $(DV_UTILS) $(DV_LIBS)
 	$(Q)  "  TAR   $@"
 	$(V) tar cf $@  -C $(topdir) $(topdir)/include
 	$(V) tar af $@ -C $(gendir) $^

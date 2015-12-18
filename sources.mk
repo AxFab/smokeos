@@ -24,9 +24,9 @@ CFLAGS += -D_GITH_=\"'$(GIT)'\" -D_VTAG_=\"'$(VERSION)'\"
 CFLAGS += -D__USE_SCALL=1 -D__USE_EXT=1
 
 CFLAGS += -I $(topdir)/include 
-CFLAGS += -I $(topdir)/include/asm/x86-gcc
+CFLAGS += -I $(topdir)/include/asm/$(target_arch)-$(CC)
 # CFLAGS += -I $(topdir)/../kernel/include
-# CFLAGS += -I $(topdir)/../kernel/include/_$(ARCH)
+# CFLAGS += -I $(topdir)/../kernel/include/_$(target_arch)
 
 LFLAGS += -nostdlib
 
@@ -39,8 +39,8 @@ $(eval $(call crt,crt0))
 master_src-y += $(srcdir)/utils/master.c
 master_LFLAGS := $(LFLAGS)
 master_SLIBS += skc
-master_CRT += $(srcdir)/crt/linux/crt0.asm
-master_SCP = $(srcdir)/crt/linux/script.ld
+master_CRT += $(srcdir)/crt/$(target_os)/crt0.asm
+master_SCP = $(srcdir)/crt/$(target_os)/script.ld
 $(eval $(call linkp,master,std))
 DV_UTILS += $(bindir)/master 
 
@@ -48,8 +48,8 @@ DV_UTILS += $(bindir)/master
 color_src-y += $(srcdir)/utils/color.c
 color_LFLAGS := $(LFLAGS)
 color_SLIBS += skc
-color_CRT = $(srcdir)/crt/linux/crt0.asm
-color_SCP = $(srcdir)/crt/linux/script.ld
+color_CRT = $(srcdir)/crt/$(target_os)/crt0.asm
+color_SCP = $(srcdir)/crt/$(target_os)/script.ld
 $(eval $(call linkp,color,std))
 DV_UTILS += $(bindir)/color
 
@@ -57,8 +57,8 @@ DV_UTILS += $(bindir)/color
 sh_src-y += $(srcdir)/utils/sh.c
 sh_LFLAGS := $(LFLAGS)
 sh_SLIBS += skc
-sh_CRT = $(srcdir)/crt/linux/crt0.asm
-sh_SCP = $(srcdir)/crt/linux/script.ld
+sh_CRT = $(srcdir)/crt/$(target_os)/crt0.asm
+sh_SCP = $(srcdir)/crt/$(target_os)/script.ld
 $(eval $(call linkp,sh,std))
 DV_UTILS += $(bindir)/sh
 
@@ -69,13 +69,12 @@ DV_UTILS += $(bindir)/sh
 skc_src-y += $(wildcard $(srcdir)/c89/*.c)
 skc_src-y += $(wildcard $(srcdir)/ext/*.c)
 skc_src-y += $(srcdir)/crt/int64.c
-skc_src-y += $(srcdir)/crt/smkos.c
-skc_src-y += $(wildcard $(srcdir)/crt/linux/*.c)
+skc_src-y += $(wildcard $(srcdir)/crt/$(target_os)/*.c)
 DV_LIBS += $(libdir)/libskc.so
 
 skc_LFLAGS := $(LFLAGS)
 $(eval $(call llib,skc,std))
 
-$(eval $(call crt,crt/linux/crt0))
+$(eval $(call crt,crt/$(target_os)/crt0))
 
 

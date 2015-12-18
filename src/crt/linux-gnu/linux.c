@@ -1,52 +1,8 @@
 #include <skc/iofile.h>
-#include <fcntl.h>
 #include <skc/scall.h>
 #include <skc/mcrs.h>
-
-int __std_argc;
-char **__std_argv;
-char **environ;
-
-FILE *stdin;
-FILE *stdout;
-FILE *stderr;
-
-void* __heap_start;
-void* __heap_end;
-
-void __malloc_init(void* base, size_t len);
-
-void* brk(long len)
-{
-  return (void*)__syscall(0x2d, len);
-}
-
-void __std_start(void) {
-  __heap_start = brk(0);
-  __heap_end = brk((long)__heap_start + 4 * _Mib_);
-  __malloc_init(__heap_start, 4 * _Mib_);
-
-  stdin = fvopen(0, O_RDONLY | O_CLOEXEC);
-  stdout = fvopen(1, O_RDONLY | O_CLOEXEC);
-  stderr = fvopen(2, O_RDONLY | O_CLOEXEC);
-}
-
-
-int read(int fd, char *buf, size_t count)
-{
-  return __syscall(0x3, fd, buf, count);
-}
-
-int write(int fd, const char *buf, size_t count)
-{
-  return __syscall(0x4, fd, buf, count);
-}
-
-
-
-
-
-
+#include <sys/types.h>
+#include <string.h>
 
 
 struct mmap_arg_struct {
@@ -84,7 +40,7 @@ char *getcwd(char *buf, size_t size)
 
 int getuid(void) 
 {
-  __syscall(0xc7, 0);
+  return __syscall(0xc7, 0);
 }
 
 /* Get current username */
