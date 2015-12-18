@@ -17,7 +17,6 @@
  *
  *   - - - - - - - - - - - - - - -
  */
-#include <unistd.h>
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
@@ -36,7 +35,7 @@ char *getcwd(char *buf, size_t size)
   return buf;
 }
 */
-
+int close(int);
 
 int pipe(int tty[2])
 {
@@ -50,7 +49,7 @@ typedef struct pstart {
   int error_;
 } pstart_t;
 
-__NORET int exec(const char *command, pstart_t* info)
+int exec(const char *command, pstart_t* info)
 {
   // __syscall(SC_EXEC, command, info);
   errno = ENOSYS;

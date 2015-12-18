@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <errno.h>
+#include <time.h>
 #include <skc/mmap.h>
+#include <skc/scall.h>
 
 int vdprintf(int fd, const char *format, va_list ap);
 void __fxprintf(int fd, const char *msg, ...)

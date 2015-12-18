@@ -17,17 +17,13 @@
  *
  *   - - - - - - - - - - - - - - -
  */
-#include <stdint.h>
-#include <limits.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
+#include <skc/int.h>
 
-
-#define __long long
-#define __ulong unsigned __long
 
 #define LOWER 0x20
 
@@ -102,7 +98,7 @@ double strtod(const char *nptr, char **endptr);
 long strtol (const char *nptr, char **endptr, int base)
 {
   char sign;
-  uintmax_t value;
+  __ulong value;
 
   if (base != 0 && (base < 2 || base > 36)) {
     return 0;
@@ -131,7 +127,7 @@ long strtol (const char *nptr, char **endptr, int base)
 
   } else {
 
-    if (value > (-(uintmax_t)LONG_MIN)) {
+    if (value > (-(__ulong)LONG_MIN)) {
       errno = EOVERFLOW;
 
       if (endptr) (*endptr) = (char *)nptr;
@@ -147,7 +143,7 @@ long strtol (const char *nptr, char **endptr, int base)
 unsigned long strtoul(const char *nptr, char **endptr, int base)
 {
   char sign;
-  uintmax_t value;
+  __ulong value;
 
   if (base != 0 && (base < 2 || base > 36)) {
     return 0;
@@ -182,7 +178,7 @@ double atof(const char *nptr);
 int atoi(const char *nptr)
 {
   char sign;
-  uintmax_t value = _strtox(nptr, NULL, 10, &sign);
+  __ulong value = _strtox(nptr, NULL, 10, &sign);
   return (int) (sign == '+') ? value : -value;
 }
 
@@ -190,7 +186,7 @@ int atoi(const char *nptr)
 long atol(const char *nptr)
 {
   char sign;
-  uintmax_t value = _strtox(nptr, NULL, 10, &sign);
+  __ulong value = _strtox(nptr, NULL, 10, &sign);
   return (long) (sign == '+') ? value : -value;
 }
 
@@ -199,7 +195,7 @@ long atol(const char *nptr)
 long long atoll(const char *nptr)
 {
   char sign;
-  uintmax_t value = _strtox(nptr, NULL, 10, &sign);
+  __ulong value = _strtox(nptr, NULL, 10, &sign);
   return (long long) (sign == '+') ? value : -value;
 }
 
@@ -207,14 +203,14 @@ long long atoll(const char *nptr)
 long long atoq(const char *nptr)
 {
   char sign;
-  uintmax_t value = _strtox(nptr, NULL, 10, &sign);
+  __ulong value = _strtox(nptr, NULL, 10, &sign);
   return (long long) (sign == '+') ? value : -value;
 }
 
 long long strtoll (const char *nptr, char **endptr, int base)
 {
   char sign;
-  uintmax_t value;
+  __ulong value;
 
   if (base != 0 && (base < 2 || base > 36)) {
     return 0;
@@ -243,7 +239,7 @@ long long strtoll (const char *nptr, char **endptr, int base)
 
   } else {
 
-    if (value > (-(uintmax_t)LLONG_MIN)) {
+    if (value > (-(__ulong)LLONG_MIN)) {
       errno = EOVERFLOW;
 
       if (endptr) (*endptr) = (char *)nptr;
@@ -258,7 +254,7 @@ long long strtoll (const char *nptr, char **endptr, int base)
 unsigned long long strtoull (const char *nptr, char **endptr, int base)
 {
   char sign;
-  uintmax_t value;
+  __ulong value;
 
   if (base != 0 && (base < 2 || base > 36)) {
     return 0;
@@ -294,7 +290,7 @@ char *_utoa (__ulong value, char *str, int base, const char *digits)
 {
   __ulong quot, rem;
   int sp = 0, j = 0;
-  char stack[sizeof(uintmax_t) * 8] = { 0 };
+  char stack[sizeof(__ulong) * 8] = { 0 };
 
   if (value == 0) {
     str[0] = '0';

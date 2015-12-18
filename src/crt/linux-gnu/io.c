@@ -1,3 +1,4 @@
+#include <stdarg.h>
 #include <sys/types.h>
 #include <skc/iofile.h>
 #include <skc/scall.h>

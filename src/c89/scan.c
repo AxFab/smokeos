@@ -20,7 +20,7 @@
 #include <string.h>
 #include <errno.h>
 #include <stdio.h>
-#include <stdint.h>
+#include <skc/int.h>
 #include <skc/mcrs.h>
 #include <skc/fd.h>
 
