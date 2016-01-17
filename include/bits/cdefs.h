@@ -20,7 +20,11 @@
 #ifndef _BITS_CDEFS_H
 #define _BITS_CDEFS_H  1
 
-#define __NORET 
+#if 0
+# include <cdefs/cc.h>
+#else
+#  define __NORET
+#endif
 
 
 #endif  /* _BITS_CDEFS_H */

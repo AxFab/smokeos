@@ -130,6 +130,10 @@ void free(void *ptr)
 
 void __malloc_init(void* base, size_t len)
 {
+  __empty_arena = 0;
+  memset(&__arenas, 0, sizeof(__arenas));
+  memset(&__firstArena, 0, sizeof(__arenas));
+
   arena_init(&__firstArena, (size_t)base, len);
   ll_append(&__arenas, &__firstArena.node_);
   __empty_arena = 1;

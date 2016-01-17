@@ -39,11 +39,15 @@ int close(int);
 
 int pipe(int tty[2])
 {
+  tty[0] = -1;
+  tty[1] = -1;
   return 0;
 }
 
 
 typedef struct pstart {
+  int exec_;
+  const char *cmd_;
   int input_;
   int output_;
   int error_;
@@ -51,9 +55,12 @@ typedef struct pstart {
 
 int exec(const char *command, pstart_t* info)
 {
-  // __syscall(SC_EXEC, command, info);
-  errno = ENOSYS;
-  return -1;
+  // int fd = open(command);
+  // io->exec_ = fd;
+  // info->cmd_ = command;
+  return (int)__syscall(0x11, command, info);
+  // errno = ENOSYS;
+  // return -1;
 }
 
 /* Pipe stream to or from a process */
@@ -65,7 +72,7 @@ FILE *popen(const char *command, const char *mode)
   int tty[2]; 
 
   md = oflags(mode);
-  if (md < 0 || pipe(tty))
+  if (md < 0 || pipe(tty) || strlen(command) <= 0)
     return NULL;
 
   memset(&info, 0, sizeof(info));

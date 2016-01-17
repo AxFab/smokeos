@@ -43,7 +43,7 @@ all: libs utils
 
 # D I R E C T O R I E S -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 prefix ?= /usr/local
-topdir ?= $(shell readlink -f .)
+topdir ?= $(shell readlink -f $(dir $(word 1,$(MAKEFILE_LIST))))
 gendir ?= $(shell pwd)
 srcdir := $(topdir)/src
 outdir := ${gendir}/obj

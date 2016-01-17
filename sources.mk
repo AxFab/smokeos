@@ -24,6 +24,7 @@ CFLAGS += -D_GITH_=\"'$(GIT)'\" -D_VTAG_=\"'$(VERSION)'\"
 CFLAGS += -D__USE_SCALL=1 -D__USE_EXT=1
 
 CFLAGS += -I $(topdir)/include 
+# CFLAGS += -I $(topdir)/include/lib/core -I $(topdir)/include/lib/cdefs -nostdinc
 CFLAGS += -I $(topdir)/include/asm/$(target_arch)-$(CC)
 # CFLAGS += -I $(topdir)/../kernel/include
 # CFLAGS += -I $(topdir)/../kernel/include/_$(target_arch)

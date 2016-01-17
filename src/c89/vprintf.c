@@ -299,6 +299,7 @@ int vfprintf (FILE *fp, const char *str, va_list ap)
   char ch;
   format_arg_t arg;
   char tmp [512];
+  char *mxs;
   format_spec_t sb;
 
   FLOCK(fp);
@@ -308,9 +309,12 @@ int vfprintf (FILE *fp, const char *str, va_list ap)
 
     /* Write litteral characters */
     if (*str != '%') {
-      if (fp->write(fp, str++, 1) < 0)
+      mxs = strchr(str, '%');
+      lg = (mxs == NULL) ? strlen(str) : (int)(mxs - str);
+      if (fp->write(fp, str, lg) < 0)
         return -1;
 
+      str += lg;
       continue;
 
       /* Handle %% escape code */

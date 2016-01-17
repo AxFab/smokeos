@@ -59,15 +59,15 @@ void *mmap(void *addr, size_t lg, int prot, int flags, int fd, off_t offset)
   // arg.fd = fd;
   // arg.offset = offset;
   // return (void*)__syscall(0x19, &arg);
-  return (void*)__syscall(0x19, fd, addr, kg, offset, prot | flags);
+  return (void*)__syscall(0x19, fd, addr, lg, offset, prot | flags);
 }
 
 
 
 
 #define SI_PWD  1
-#define SI_UID  2
-#define SI_USERNAME  3
+#define SI_UID  3
+#define SI_USERNAME  2
 
 /* Get current working directory */
 char *getcwd(char *buf, size_t size)
@@ -86,7 +86,6 @@ int getuid(void)
 /* Get current username */
 int getlogin_r(char *buf, size_t size)
 {
-  __syscall(0x18, buf, size, SI_USERNAME);
-  return buf;
+  return __syscall(0x18, buf, size, SI_USERNAME);
 }
 
