@@ -1,0 +1,9 @@
+# Use white-listed files and black-listed directories
+*
+!*/
+
+# Allow documentation files
+!*.md
+
+# Allow repository files
+!.gitignore

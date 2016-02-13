@@ -1,0 +1,43 @@
+/*
+ *      This file is part of the SmokeOS project.
+ *  Copyright (C) 2015  <Fabien Bavent>
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as
+ *  published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *   - - - - - - - - - - - - - - -
+ */
+#ifndef _SETJMP_H
+#define _SETJMP_H 1
+
+#include <bits/setjmp.h>
+#include <bits/sigset.h>
+
+/* Calling environment, plus possibly a saved signal mask.  */
+typedef struct __jmp_buf
+{
+  /* Calling environment.  */
+  __jmp_stackbuf jmpbuf_;
+  /* Saved the signal mask?  */
+  int mask_was_saved_;
+  /* Saved signal mask.  */
+  __sigset_t saved_mask_;  
+} jmp_buf[1];
+
+/* Nonlocal jump to a saved stack context */
+void longjmp(jmp_buf env, int val);
+/* Save stack context for nonlocal goto */
+int setjmp(jmp_buf env); 
+
+
+#endif  /* _SETJMP_H */
