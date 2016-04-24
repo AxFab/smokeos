@@ -421,8 +421,12 @@ char *ctime(const time_t *timep)
   return asctime(gmtime_r(timep, &buf));
 }
 
-/* Calculate time difference */
-double difftime(time_t time1, time_t time0);
+/* The number of seconds elapsed between time time1 and time time0, 
+ * represented as a double. */
+double difftime(time_t time1, time_t time0)
+{
+  return time1 - time0;
+}
 
 /* Transform date and time to broken-down time */
 struct tm *gmtime(const time_t *timep)

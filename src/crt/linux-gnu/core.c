@@ -45,3 +45,9 @@ time_t time(time_t *p)
     *p = s;
   return s;
 }
+
+
+void exit(int code) {
+  __syscall(0x1, code);
+}
+

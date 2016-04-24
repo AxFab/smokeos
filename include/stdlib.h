@@ -86,6 +86,7 @@ long long atoq(const char *nptr);
 
 
 /* RANDOM */
+#define RAND_MAX 0x7FFF
 /* Sets the seed for a new sequence of pseudo-random integers. */
 void srand(unsigned int seed);
 /* Pseudo-random number generator */

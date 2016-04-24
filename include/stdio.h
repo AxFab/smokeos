@@ -26,6 +26,8 @@
 #include <skc/iostm.h>
 #undef _XCHAR
 
+#include <bits/iolimits.h>
+#include <skc/libio.h>
 
 /* Get a newline-terminated string from stdin, removing the newline.
    DO NOT USE THIS FUNCTION!!  There is no limit on how much it will read. */
@@ -33,7 +35,6 @@ char *gets (char *s);
 /* Write a string, followed by a newline, to stdout. */
 int puts (const char *s);
 
-#include <skc/libio.h>
 
 
 /* Print a message describing the meaning of the value of errno. */
@@ -43,7 +44,14 @@ int remove(const char *filename);
 /* Rename file OLD to NEW.  */
 int rename(const char *oldFn, const char *newFn);
 
+
 /* tmpfile, tmpnam */
+/* Generate and open a new temporary file */ 
+FILE *tmpfile(void);
+/* Generate a new name for a tempoary file */
+char *tmpnam(char *);
+char *tmpnam_r(char *);
+
 
 extern FILE *stdin;
 extern FILE *stdout;

@@ -22,7 +22,7 @@
 
 #include <features.h>
 #include <stddef.h>
-#include <bits/types.h>
+#include <bits/time.h>
 
 typedef __time_t time_t;
 typedef __clock_t clock_t;

@@ -27,6 +27,7 @@
 int open(const char*, int, ...);
 int close(int);
 int read(int fd, void *buf, size_t count); 
-int write(int fd, const void *buf, size_t count); 
+int write(int fd, const void *buf, size_t count);
+int lseek(int fd, off_t offset, unsigned int origin);
 
 #endif  /* _SKC_FD_H */

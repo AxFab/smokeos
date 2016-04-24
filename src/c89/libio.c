@@ -29,6 +29,8 @@
 #include <errno.h>
 #include <skc/fd.h>
 
+int fflush_unlocked(FILE *stream);
+
 /* Parse the character base mode for opening file and return binary mode
  * The mode parameter must start by on of this sequence:
  *   r  Open the file for reading. The stream is positioned at the
@@ -113,6 +115,11 @@ static int _fwrite(FILE *stream, const char *buf, size_t len)
   /* TODO */
 }
 
+static int _fseek(FILE *stream, long pos, int dir)
+{
+  return lseek(stream->fd_, pos, dir);
+}
+
 /* Allocate a new FILE structure form an open file descriptor. */
 FILE* fvopen(int fd, int oflags)
 {
@@ -136,6 +143,7 @@ FILE* fvopen(int fd, int oflags)
   fp->oflags_ = oflags | _IOLBF;
   fp->read = _fread;
   fp->write = _fwrite;
+  fp->seek = _fseek;
   return fp;
 }
 
@@ -181,7 +189,46 @@ FILE *fdopen(int fd, const char *mode)
 
 
 /* Stream open functions */
-FILE *freopen(const char *path, const char *mode, FILE *stream);
+FILE *freopen(const char *path, const char *mode, FILE *stream)
+{
+  FILE *newstm;
+  int oflg = oflags(mode);
+  FLOCK(stream);
+  fflush_unlocked(stream);
+
+  if (!path) {
+    if (oflg & O_CLOEXEC)
+      fcntl(stream->fd_, F_SETFD, FD_CLOEXEC);
+    oflg &= ~(O_CREAT|O_EXCL|O_CLOEXEC);
+    if (fcntl(stream->fd_, F_SETFL, oflg) < 0) {
+      fclose(stream);
+      return NULL;
+    }
+  } else {
+    newstm = fopen(path, mode);
+    if (!newstm) {
+      fclose(stream);
+      return NULL;
+    }
+    if (newstm->fd_ == stream->fd_) 
+      newstm->fd_ = -1; /* avoid closing in fclose */
+    // else if (__dup3(f2->fd, f->fd, oflg & O_CLOEXEC) < 0) {
+    //   fclose(newstm);
+    //   fclose(stream);
+    //   return NULL;
+    // }
+
+    stream->flags_ = (stream->flags_ & F_PERM) | newstm->flags_;
+    stream->read = newstm->read;
+    stream->write = newstm->write;
+    stream->seek = newstm->seek;
+    // stream->close = newstm->close;
+    fclose(newstm);
+  }
+
+  FUNLOCK(stream);
+  return stream;
+}
 
 
 /* Stream close functions */
@@ -201,7 +248,7 @@ int fclose(FILE *stream)
     /* TODO struct _IO_FILE_ are linked, remove fom the list! */
   }
 
-  ret = fflush(stream);
+  ret = fflush_unlocked(stream);
   ret |= close(stream->fd_);
 
   if (stream->rbf_.base_) free(stream->rbf_.base_);
@@ -262,28 +309,53 @@ int fseek(FILE *stream, long offset, int whence)
 }
 
 /* Reposition a stream */
-long ftell(FILE *stream);
+long ftell(FILE *stream)
+{
+  return (long)stream->fpos_;
+}
 
 /* Reposition a stream */
-void rewind(FILE *stream);
+void rewind(FILE *stream)
+{
+  fflush(stream);
+  fseek(stream, 0, SEEK_SET);
+}
 
 /* Reposition a stream */
-int fgetpos(FILE *stream, fpos_t *pos);
+int fgetpos(FILE *stream, fpos_t *pos)
+{
+  *pos = (fpos_t)stream->fpos_;
+  return 0;
+}
 
 /* Reposition a stream */
-int fsetpos(FILE *stream, fpos_t *pos); 
+int fsetpos(FILE *stream, fpos_t *pos)
+{
+  if (fseek(stream, (long)*pos, SEEK_SET) >= 0)
+    return 0;
+  return -1;
+}
 
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
 
 /* Check and reset stream status */
-void clearerr(FILE *stream);
+void clearerr(FILE *stream)
+{
+  stream->flags_ &= !(FF_EOF | FF_ERR);
+}
 
 /* Check and reset stream status */
-int feof(FILE *stream);
+int feof(FILE *stream)
+{
+  return stream->flags_ & FF_EOF;
+}
 
 /* Check and reset stream status */
-int ferror(FILE *stream);
+int ferror(FILE *stream)
+{
+  return stream->flags_ & FF_ERR;
+}
 
 /* Check and reset stream status */
 int fileno(FILE *stream)
@@ -354,13 +426,4 @@ char *gets (char *s);
 /* Write a string, followed by a newline, to stdout. */
 int puts (const char *s);
 
-
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
-
-/* Remove file FILENAME.  */
-int remove(const char *filename);
-
-
-/* Rename file OLD to NEW.  */
-int rename(const char *oldFn, const char *newFn);
 

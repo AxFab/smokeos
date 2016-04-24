@@ -24,6 +24,11 @@
 
 #define EOF -1
 
+#define BUFSIZ 512
+
+#define FF_EOF  (1 << 1)
+#define FF_ERR  (1 << 2)
+
 typedef unsigned long fpos_t;
 typedef struct _IO_FILE FILE;
 
@@ -40,6 +45,7 @@ struct _IO_FILE {
   int lbuf_;
   int lock_;  /* -1: no lock */
   size_t count_;
+  size_t fpos_;
 
   struct _IO_BUF rbf_;
   struct _IO_BUF wbf_;

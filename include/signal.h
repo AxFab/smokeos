@@ -20,6 +20,8 @@
 #ifndef _SIGNAL_H
 #define _SIGNAL_H 1
 
+#include <bits/signum.h>
+
 /* Type of a signal handler.  */
 typedef void (*sighandler_t)(int);
 /* ANSI C signal handling */
