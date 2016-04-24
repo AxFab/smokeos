@@ -74,8 +74,9 @@ skc_src-y += $(wildcard $(srcdir)/crt/$(target_os)/*.c)
 DV_LIBS += $(libdir)/libskc.so
 
 skc_LFLAGS := $(LFLAGS)
-$(eval $(call llib,skc,std))
+skm_LFLAGS := $(LFLAGS)
 
+$(eval $(call llib,skc,std))
 $(eval $(call crt,crt/$(target_os)/crt0))
 
 
