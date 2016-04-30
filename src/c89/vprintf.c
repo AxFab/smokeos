@@ -310,7 +310,7 @@ int vfprintf (FILE *fp, const char *str, va_list ap)
     /* Write litteral characters */
     if (*str != '%') {
       mxs = strchr(str, '%');
-      lg = (mxs == NULL) ? strlen(str) : (int)(mxs - str);
+      lg = (mxs == NULL) ? (int)strlen(str) : (int)(mxs - str);
       if (fp->write(fp, str, lg) < 0)
         return -1;
 

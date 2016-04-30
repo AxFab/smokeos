@@ -109,13 +109,13 @@ void *calloc(size_t nmemb, size_t size)
 /* Re-allocate dynamic memory */
 void *realloc(void *ptr, size_t size)
 {
-  int lg = 0; /* Get chunk size */ 
+  size_t lg = 0; /* Get chunk size */ 
   void *buf;
   if (lg > size)
     return ptr;
   /* TODO try to grab next item! */
   buf = malloc(size);
-  memset(buf, ptr, MIN(lg, size));
+  memcpy(buf, ptr, MIN(lg, size));
   free(ptr);
   return buf; 
 }

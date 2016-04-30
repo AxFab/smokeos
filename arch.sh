@@ -6,6 +6,7 @@ os=
 
 case `uname -m` in
   i386|i486|i686) arch=x86 ;;
+  x86_64) arch=x86_64 ;;
   *) arch=? ;;
 esac
 

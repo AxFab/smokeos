@@ -55,3 +55,13 @@ void perror(const char *s)
   __fxprintf(0, msg, __progname, SEPARATOR_IF(__progname),
     strerror_r(errno, errbuf, sizeof (errbuf)), errno, s);
 }
+
+
+/* Terminate a function in case of stack overflow */
+void __stack_chk_fail(void)
+{
+  static const char *msg = "%s%s Stack overflow \n";
+  __fxprintf(0, msg, __progname, SEPARATOR_IF(__progname));
+  abort();
+}
+

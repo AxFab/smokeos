@@ -53,3 +53,9 @@ int rename(const char *oldFn, const char *newFn)
 }
 
 
+
+int fcntl(int fd, int cmd, ...) 
+{
+  return -1;
+}
+
