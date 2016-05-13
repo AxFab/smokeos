@@ -1,3 +1,9 @@
 [submodule "kernel"]
 	path = kernel
 	url = https://github.com/AxFab/kernel
+[submodule "doc"]
+	path = doc
+	url = https://github.com/AxFab/kernel.wiki.git
+[submodule "kernel-scenarios"]
+	path = kernel-scenarios
+	url = https://github.com/AxFab/kernel-scenarios.git

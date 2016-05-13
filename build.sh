@@ -9,8 +9,8 @@ rm -rf iso
 mkdir iso
 cd iso
 
-make -f ../Makefile
-make -f ../kernel/Makefile kImage
+make -f ../Makefile topdir=../ gendir=.
+make -f ../kernel/Makefile topdir=../kernel gendir=. kImage
 
 cd ..
 
