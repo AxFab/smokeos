@@ -18,7 +18,7 @@
  *   - - - - - - - - - - - - - - -
  */
 
-
+#ifdef _SFM
 /* Searches the first len bytes of array str for character c. */
 _TVOID *_SFM(chr)(const _TVOID *str, int c, size_t len);
 /* Compares two blocks of signed chars. */
@@ -29,7 +29,7 @@ _TVOID *_SFM(cpy)(_TVOID *dest, const _TVOID *src, size_t len);
 _TVOID *_SFM(move)(_TVOID *dest, const _TVOID *src, size_t len);
 /* Sets num bytes of buffer to byte c. */
 _TVOID *_SFM(set)(_TVOID *buffer, int c, size_t num);
-
+#endif
 
 /* Appends src to dest. */
 _TCHAR *_SFX(cat)(_TCHAR *dest, const _TCHAR *src);

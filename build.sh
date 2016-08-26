@@ -19,11 +19,10 @@ mv iso/kImage iso/boot/kImage
 mv iso/kImage.map iso/boot/kImage.map
 rm -rf iso/obj
 cat >  iso/boot/grub/grub.cfg << EOF
-set default="0"
-set timeout=10
+set timeout=0
 
 menuentry "Smoke_x86" {
-  multiboot /boot/kImage
+  multiboot /boot/kImage boot=casper integrity-check quiet splash 
 }
 EOF
 
