@@ -1,3 +1,6 @@
 [submodule "kernel"]
-	path = kernel
-	url = https://github.com/AxFab/kernel
+  path = kernel
+  url = https://github.com/AxFab/kernel
+[submodule "skc"]
+	path = skc
+	url = https://github.com/axfab/skc
