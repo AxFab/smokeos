@@ -17,15 +17,18 @@
 
 # F L A G S -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 CFLAGS += -Wall -Wextra -Wno-unused-parameter -fno-builtin
-# CFLAGS += -ggdb3 
+# CFLAGS += -ggdb3
 # CFLAGS += -pedantic
 CFLAGS += -D_DATE_=\"'$(DATE)'\" -D_OSNAME_=\"'$(LINUX)'\"
 CFLAGS += -D_GITH_=\"'$(GIT)'\" -D_VTAG_=\"'$(VERSION)'\"
-CFLAGS += -D__USE_SCALL=1 -D__USE_EXT=1
 
-CFLAGS += -I $(topdir)/skc/include 
-# CFLAGS += -I $(topdir)/include/lib/core -I $(topdir)/include/lib/cdefs -nostdinc
-CFLAGS += -I $(topdir)/skc/include/asm/$(target_arch)-$(CC)
+CFLAGS += -nostdinc -isystem $(topdir)/skc/include
+CFLAGS += -isystem $(topdir)/skc/include/asm/x86-gcc
+CFLAGS += -D__SKC_PARAM -D__C11 -D__XOPEN_95 -D__REENT -D__SECURED_2
+
+# CFLAGS += -I $(topdir)/skc/include
+# # CFLAGS += -I $(topdir)/include/lib/core -I $(topdir)/include/lib/cdefs -nostdinc
+# CFLAGS += -I $(topdir)/skc/include/asm/$(target_arch)-$(CC)
 # CFLAGS += -I $(topdir)/../kernel/include
 # CFLAGS += -I $(topdir)/../kernel/include/_$(target_arch)
 
@@ -45,7 +48,7 @@ master_LFLAGS2 := $(LFLAGS2)
 master_CRT += $(srcdir)/crt/$(target_os)/crt0.asm
 master_SCP = $(srcdir)/crt/$(target_os)/script.ld
 $(eval $(call linkp,master,std))
-DV_UTILS += $(bindir)/master 
+DV_UTILS += $(bindir)/master
 
 # color
 color_src-y += $(srcdir)/utils/color.c
@@ -66,6 +69,16 @@ sh_CRT = $(srcdir)/crt/$(target_os)/crt0.asm
 sh_SCP = $(srcdir)/crt/$(target_os)/script.ld
 $(eval $(call linkp,sh,std))
 DV_UTILS += $(bindir)/sh
+
+# ps
+ps_src-y += $(srcdir)/utils/ps.c
+ps_LFLAGS := $(LFLAGS)
+ps_LFLAGS2 := $(LFLAGS2)
+# color_SLIBS += skc
+ps_CRT = $(srcdir)/crt/$(target_os)/crt0.asm
+ps_SCP = $(srcdir)/crt/$(target_os)/script.ld
+$(eval $(call linkp,ps,std))
+DV_UTILS += $(bindir)/ps
 
 # U N I T - T E S T S -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 

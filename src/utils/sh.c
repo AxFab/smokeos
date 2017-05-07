@@ -21,7 +21,7 @@
 #include <limits.h>
 #include <errno.h>
 #include <string.h>
-#include <unistd.h>
+// #include <unistd.h>
 
 
 int start_program(const char* command)
@@ -31,7 +31,7 @@ int start_program(const char* command)
 
   fpipe = (FILE*)popen(command,"r");
   if (!fpipe) {
-    fprintf(stderr, "Unable to open the new process: '%s' - [%d] %s.\n", 
+    fprintf(stderr, "Unable to open the new process: '%s' - [%d] %s.\n",
         command, errno, strerror(errno));
     return -1;
   }
@@ -55,7 +55,7 @@ int main ()
   // Find PWD
   if (getcwd(pwd, PATH_MAX) == NULL) {
     // EACCESS, EFAULT, EINVAL, ENAMETOOLONG, ENOENT, ERANGE
-    fprintf(stderr, "Unable to find working directory: [%d] %s.\n", 
+    fprintf(stderr, "Unable to find working directory: [%d] %s.\n",
         errno, strerror(errno));
     return EXIT_FAILURE;
   }
@@ -63,7 +63,7 @@ int main ()
   // Find USERNAME
   if (getlogin_r(usr, PATH_MAX)) {
     // EACCESS, EFAULT, EINVAL, ENAMETOOLONG, ENOENT, ERANGE
-    fprintf(stderr, "Unable to find username: [%d] %s.\n", 
+    fprintf(stderr, "Unable to find username: [%d] %s.\n",
         errno, strerror(errno));
     return EXIT_FAILURE;
   }
@@ -75,7 +75,7 @@ int main ()
     gt = fgets(cmd, PATH_MAX, stdin);
     if (gt == NULL || gt == (void*)EOF) {
       fputs("\n", stdout);
-      fprintf(stderr, "Unable to read user input: [%d] %s.\n", 
+      fprintf(stderr, "Unable to read user input: [%d] %s.\n",
           errno, strerror(errno));
       return EXIT_FAILURE;
     }

@@ -13,7 +13,7 @@
                           "\033[" #f "7;4" #c "mporta. \033[0m" "\n"
 
 
-int main () 
+int main ()
 {
   fputs("Background | Foreground colors - Dark colors\n", stdout);
   fputs("--------------------------------------------------------------------------\n", stdout);

@@ -21,9 +21,9 @@
 #include <limits.h>
 #include <errno.h>
 #include <string.h>
-#include <unistd.h>
+// #include <unistd.h>
 
-int new_syr() 
+int new_syr()
 {
   FILE *fp = NULL;
   fp = fopen(".syr", "w");
@@ -41,7 +41,7 @@ int start_program(const char* command)
 
   fpipe = (FILE*)popen(command,"r");
   if (!fpipe) {
-    fprintf(stderr, "Unable to open the new process: '%s' - [%d] %s.\n", 
+    fprintf(stderr, "Unable to open the new process: '%s' - [%d] %s.\n",
         command, errno, strerror(errno));
     return -1;
   }
@@ -64,7 +64,7 @@ int main ()
   fputs("Master " _VTAG_ " \033[30m-- same puporse as init or systemd\033[0m\n", stdout);
   if (getcwd(pwd, PATH_MAX) == NULL) {
     // EACCESS, EFAULT, EINVAL, ENAMETOOLONG, ENOENT, ERANGE
-    fprintf(stderr, "Unable to find working directory: [%d] %s.\n", 
+    fprintf(stderr, "Unable to find working directory: [%d] %s.\n",
         errno, strerror(errno));
     return EXIT_FAILURE;
   }
@@ -72,7 +72,7 @@ int main ()
   fp = fopen(".syr", "r");
   if (fp == NULL) {
     if (errno != ENOENT || new_syr() || !(fp = fopen(".syr", "r"))) {
-      fprintf(stderr, "Unable to open system registers: [%d] %s.\n", 
+      fprintf(stderr, "Unable to open system registers: [%d] %s.\n",
           errno, strerror(errno));
       // return EXIT_FAILURE;
     }
@@ -83,7 +83,7 @@ int main ()
   gt = fgets(usr, PATH_MAX, stdin);
   if (gt == NULL || gt == (void*)EOF) {
     fputs("\n", stdout);
-    fprintf(stderr, "Unable to read user input: [%d] %s.\n", 
+    fprintf(stderr, "Unable to read user input: [%d] %s.\n",
         errno, strerror(errno));
     return EXIT_FAILURE;
   }
