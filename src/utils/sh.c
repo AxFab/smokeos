@@ -23,6 +23,8 @@
 #include <string.h>
 // #include <unistd.h>
 
+char *getcwd(char *buf, size_t size);
+int getlogin_r(char *buf, size_t bufsize);
 
 int start_program(const char* command)
 {
@@ -40,6 +42,8 @@ int start_program(const char* command)
   //   printf("%s", line);
   // }
   // pclose(fpipe);
+  //  -- or
+  // waitpid()
   return 0;
 }
 

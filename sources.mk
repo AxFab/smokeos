@@ -17,14 +17,22 @@
 
 # F L A G S -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 CFLAGS += -Wall -Wextra -Wno-unused-parameter -fno-builtin
-# CFLAGS += -ggdb3
+ifneq ($(target_os),smkos)
+CFLAGS += -ggdb3
+endif
 # CFLAGS += -pedantic
 CFLAGS += -D_DATE_=\"'$(DATE)'\" -D_OSNAME_=\"'$(LINUX)'\"
 CFLAGS += -D_GITH_=\"'$(GIT)'\" -D_VTAG_=\"'$(VERSION)'\"
+CFLAGS += -Wno-multichar
 
+# Use Library SKC
+ifneq ($(SKC),)
 CFLAGS += -nostdinc -isystem $(topdir)/skc/include
-CFLAGS += -isystem $(topdir)/skc/include/asm/x86-gcc
+CFLAGS += -isystem $(topdir)/skc/include/asm/$(target_arch)-$(CC)
+CFLAGS += -isystem $(topdir)/skc/include/asm/$(target_os)
 CFLAGS += -D__SKC_PARAM -D__C11 -D__XOPEN_95 -D__REENT -D__SECURED_2
+LFLAGS += -nostdlib
+endif
 
 # CFLAGS += -I $(topdir)/skc/include
 # # CFLAGS += -I $(topdir)/include/lib/core -I $(topdir)/include/lib/cdefs -nostdinc
@@ -32,8 +40,7 @@ CFLAGS += -D__SKC_PARAM -D__C11 -D__XOPEN_95 -D__REENT -D__SECURED_2
 # CFLAGS += -I $(topdir)/../kernel/include
 # CFLAGS += -I $(topdir)/../kernel/include/_$(target_arch)
 
-LFLAGS += -nostdlib
-LFLAGS2 += $(gendir)/lib/libskc.a
+# LFLAGS2 += $(gendir)/lib/libskc.a
 
 std_CFLAGS := $(CFLAGS)
 $(eval $(call ccpl,std))
@@ -43,41 +50,51 @@ $(eval $(call ccpl,std))
 # master
 master_src-y += $(srcdir)/utils/master.c
 master_LFLAGS := $(LFLAGS)
-master_LFLAGS2 := $(LFLAGS2)
+# master_LFLAGS2 := $(LFLAGS2)
 # master_SLIBS += skc
 master_CRT += $(srcdir)/crt/$(target_os)/crt0.asm
 master_SCP = $(srcdir)/crt/$(target_os)/script.ld
-$(eval $(call linkp,master,std))
+$(eval $(call link,master,std))
 DV_UTILS += $(bindir)/master
 
 # color
 color_src-y += $(srcdir)/utils/color.c
 color_LFLAGS := $(LFLAGS)
-color_LFLAGS2 := $(LFLAGS2)
+# color_LFLAGS2 := $(LFLAGS2)
 # color_SLIBS += skc
 color_CRT = $(srcdir)/crt/$(target_os)/crt0.asm
 color_SCP = $(srcdir)/crt/$(target_os)/script.ld
-$(eval $(call linkp,color,std))
+$(eval $(call link,color,std))
 DV_UTILS += $(bindir)/color
 
 # shell
 sh_src-y += $(srcdir)/utils/sh.c
 sh_LFLAGS := $(LFLAGS)
-sh_LFLAGS2 := $(LFLAGS2)
+# sh_LFLAGS2 := $(LFLAGS2)
 # sh_SLIBS += skc
 sh_CRT = $(srcdir)/crt/$(target_os)/crt0.asm
 sh_SCP = $(srcdir)/crt/$(target_os)/script.ld
-$(eval $(call linkp,sh,std))
+$(eval $(call link,sh,std))
 DV_UTILS += $(bindir)/sh
+
+# Sk shell
+sksh_src-y += $(wildcard $(srcdir)/sksh/*.c) $(srcdir)/sksh/kdb/US_international.c
+sksh_LFLAGS := $(LFLAGS) -L/usr/X11R6/lib -lX11
+# sksh_LFLAGS2 := $(LFLAGS2)
+# sksh_SLIBS += skc
+sksh_CRT = $(srcdir)/crt/$(target_os)/crt0.asm
+sksh_SCP = $(srcdir)/crt/$(target_os)/script.ld
+$(eval $(call link,sksh,std))
+DV_UTILS += $(bindir)/sksh
 
 # ps
 ps_src-y += $(srcdir)/utils/ps.c
 ps_LFLAGS := $(LFLAGS)
-ps_LFLAGS2 := $(LFLAGS2)
-# color_SLIBS += skc
+# ps_LFLAGS2 := $(LFLAGS2)
+# ps_SLIBS += skc
 ps_CRT = $(srcdir)/crt/$(target_os)/crt0.asm
 ps_SCP = $(srcdir)/crt/$(target_os)/script.ld
-$(eval $(call linkp,ps,std))
+$(eval $(call link,ps,std))
 DV_UTILS += $(bindir)/ps
 
 # U N I T - T E S T S -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

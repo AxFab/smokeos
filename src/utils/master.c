@@ -23,6 +23,9 @@
 #include <string.h>
 // #include <unistd.h>
 
+char *getcwd(char *buf, size_t size);
+int getlogin_r(char *buf, size_t bufsize);
+
 int new_syr()
 {
   FILE *fp = NULL;

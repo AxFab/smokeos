@@ -41,7 +41,7 @@ time_t time(time_t *p)
 {
   time_t s;
   __syscall(0x0d, &s);
-  if (p) 
+  if (p)
     *p = s;
   return s;
 }
